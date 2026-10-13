@@ -10,3 +10,7 @@ data/
 *.db
 private_data/
 *.log
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
