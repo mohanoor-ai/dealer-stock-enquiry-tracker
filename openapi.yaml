@@ -1,0 +1,318 @@
+openapi: 3.1.0
+info:
+  title: Dealer Stock & Enquiry Tracker
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/vehicles:
+    get:
+      summary: List Vehicles
+      operationId: list_vehicles_api_vehicles_get
+      parameters:
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Q
+      - name: include_archived
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Include Archived
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      summary: Create Vehicle
+      operationId: create_vehicle_api_vehicles_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleInput'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/vehicles/{vehicle_id}:
+    put:
+      summary: Edit Vehicle
+      operationId: edit_vehicle_api_vehicles__vehicle_id__put
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Vehicle Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      summary: Update Vehicle State
+      operationId: update_vehicle_state_api_vehicles__vehicle_id__patch
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Vehicle Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleState'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/enquiries:
+    get:
+      summary: List Enquiries
+      operationId: list_enquiries_api_enquiries_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      summary: Create Enquiry
+      operationId: create_enquiry_api_enquiries_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnquiryInput'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/enquiries/{enquiry_id}:
+    patch:
+      summary: Complete Follow Up
+      operationId: complete_follow_up_api_enquiries__enquiry_id__patch
+      parameters:
+      - name: enquiry_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Enquiry Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowUp'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/dashboard:
+    get:
+      summary: Dashboard
+      operationId: dashboard_api_dashboard_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    EnquiryInput:
+      properties:
+        vehicle_id:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Vehicle Id
+        customer:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Customer
+        message:
+          type: string
+          maxLength: 1000
+          minLength: 1
+          title: Message
+        follow_up:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Follow Up
+      additionalProperties: false
+      type: object
+      required:
+      - vehicle_id
+      - customer
+      - message
+      title: EnquiryInput
+    FollowUp:
+      properties:
+        completed:
+          type: boolean
+          title: Completed
+      additionalProperties: false
+      type: object
+      required:
+      - completed
+      title: FollowUp
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VehicleInput:
+      properties:
+        make:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Make
+        model:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Model
+        year:
+          type: integer
+          maximum: 2100.0
+          minimum: 1900.0
+          title: Year
+        price_pence:
+          type: integer
+          maximum: 100000000.0
+          minimum: 0.0
+          title: Price Pence
+      additionalProperties: false
+      type: object
+      required:
+      - make
+      - model
+      - year
+      - price_pence
+      title: VehicleInput
+    VehicleState:
+      properties:
+        status:
+          type: string
+          enum:
+          - available
+          - reserved
+          - sold
+          title: Status
+        archived:
+          type: boolean
+          title: Archived
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      title: VehicleState

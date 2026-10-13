@@ -1,0 +1,3 @@
+# Agent extension examples
+Instructions: AGENTS.md. Workflow: agent-capabilities/review-api-change/WORKFLOW.md. Specialist: agent-capabilities/subagents/api-reviewer.md. MCP: mcp-server/server.py. Guard: agent-hooks/pre-commit. Loop: custom-agent/agent.py. Permissions: docs/permissions.md.
+Run the guard manually first. Install it in a Git repository by copying it to .git/hooks/pre-commit and making it executable. The loop is an offline demonstration, not an autonomous engineering agent. MCP SDK integration and a full host demo are pending. Do not claim full extension-pack evidence until these are actually run and reviewed.

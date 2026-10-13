@@ -1,0 +1,2 @@
+# Optional MCP example
+Install the official Python MCP SDK in a virtual environment: `python -m pip install mcp==1.30.0` (internet required). Run `python mcp-server/server.py` through your MCP host using stdio. The database path is fixed; the tool is read-only and returns counts. No arbitrary SQL is accepted. A local SDK stdio client verified handshake, tool listing and a stock_counts call. Agent-host configuration and the full extension walkthrough remain pending.
