@@ -1,2058 +1,909 @@
-{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Dealer Desk API",
-    "version": "2.0.0-design",
-    "description": "Contract-first upgrade design. The existing baseline backend does not implement this version yet. Fictional demo data only."
-  },
-  "servers": [
-    {
-      "url": "http://127.0.0.1:8090",
-      "description": "Planned local demo"
-    }
-  ],
-  "security": [
-    {
-      "demoBearer": []
-    }
-  ],
-  "paths": {
-    "/health": {
-      "get": {
-        "operationId": "health",
-        "summary": "Check app and database readiness",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Health"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Database unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Health"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/vehicles": {
-      "get": {
-        "operationId": "listVehicles",
-        "summary": "Search and filter vehicle stock",
-        "description": "Case-insensitive literal substring search on make/model. Stable order: ID descending. Archived stock excluded unless requested.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VehiclePage"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25
-            }
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "maxLength": 100
-            }
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "available",
-                "reserved",
-                "sold"
-              ]
-            }
-          },
-          {
-            "name": "include_archived",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ]
-      },
-      "post": {
-        "operationId": "createVehicle",
-        "summary": "Create vehicle stock",
-        "description": "Status starts available, archived false, revision 1; approved_facts defaults to []. Price is integer pence. Strict types and whitespace trimming are required.",
-        "responses": {
-          "201": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Vehicle"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VehicleCreate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/vehicles/{vehicle_id}": {
-      "parameters": [
-        {
-          "name": "vehicle_id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 1
-          }
-        }
-      ],
-      "get": {
-        "operationId": "getVehicle",
-        "summary": "Read a vehicle, including archived stock",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Vehicle"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "operationId": "updateVehicle",
-        "summary": "Edit details, status or archive state",
-        "description": "Atomic compare-and-update: match the submitted revision; otherwise 409 with current_revision. Increment revision on accepted changes. Same-status detail edits are allowed. available\u2192reserved/sold; reserved\u2192available/sold; sold\u2192available only. sold\u2192reserved returns 409. Archive/restore is reversible. Audit the change.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Vehicle"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VehicleUpdate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/enquiries": {
-      "get": {
-        "operationId": "listEnquiries",
-        "summary": "List enquiry queue",
-        "description": "Stable order ID descending.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EnquiryPage"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25
-            }
-          },
-          {
-            "name": "vehicle_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "new",
-                "contacted",
-                "closed"
-              ]
-            }
-          }
-        ]
-      },
-      "post": {
-        "operationId": "createEnquiry",
-        "summary": "Record an enquiry",
-        "description": "Vehicle must exist and be unarchived. Status starts new, revision 1. Trim bounded text; no real customer data in demo.",
-        "responses": {
-          "201": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Enquiry"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EnquiryCreate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/enquiries/{enquiry_id}": {
-      "parameters": [
-        {
-          "name": "enquiry_id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 1
-          }
-        }
-      ],
-      "get": {
-        "operationId": "getEnquiry",
-        "summary": "Read an enquiry",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Enquiry"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "operationId": "updateEnquiry",
-        "summary": "Change enquiry state",
-        "description": "Revision match required. new\u2192contacted/closed; contacted\u2192closed/new; closed\u2192contacted for explicit reopen. Same-state submissions are allowed but logged. Reject invalid transitions with 409.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Enquiry"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EnquiryUpdate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tasks": {
-      "get": {
-        "operationId": "listTasks",
-        "summary": "List follow-ups",
-        "description": "Stable order ID descending. Overdue means incomplete and due_date before today in configured dealer timezone (Europe/London default).",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TaskPage"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25
-            }
-          },
-          {
-            "name": "enquiry_id",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "completed",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "overdue",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ]
-      },
-      "post": {
-        "operationId": "createTask",
-        "summary": "Schedule a follow-up",
-        "description": "Enquiry must exist and be open. Reject closed enquiry with 409. due_date must be today or later in dealer timezone. Past dates become overdue naturally. note defaults empty; completed false; revision 1.",
-        "responses": {
-          "201": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TaskCreate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tasks/{task_id}": {
-      "parameters": [
-        {
-          "name": "task_id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "integer",
-            "minimum": 1
-          }
-        }
-      ],
-      "get": {
-        "operationId": "getTask",
-        "summary": "Read a follow-up",
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "operationId": "updateTask",
-        "summary": "Complete, reopen or reschedule",
-        "description": "Revision match required. A changed due_date must be today or later; completing an already overdue task is allowed. Reopening a task for a closed enquiry returns 409; completion is allowed. Change increments revision and creates audit event.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TaskUpdate"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/dashboard": {
-      "get": {
-        "operationId": "getDashboard",
-        "summary": "Read stock and outstanding-work totals",
-        "description": "Stock counts exclude archived vehicles. Value includes available/reserved only. Open enquiries are new/contacted. Task totals count incomplete tasks for open enquiries; overdue uses dealer timezone.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dashboard"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/changes": {
-      "get": {
-        "operationId": "listChanges",
-        "summary": "Read bounded change notifications",
-        "description": "Ascending sequence; next_sequence is last returned sequence, or input after if empty. has_more signals another page. No customer text. Poll every 3 seconds; after draining pages refresh affected views. Server retains all demo notifications. This is polling, not WebSockets.",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Changes"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid demo access token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Record not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Stale revision, archived stock or invalid workflow transition",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid JSON fields or business validation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Demo request rate exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Dependency unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "after",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 100
-            }
-          }
-        ]
-      }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "demoBearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "description": "Operator-configured demo token; never embed in public frontend assets. Enter at runtime; keep in session memory. All API routes require it; health is public. Authentication/rate limiting are not implemented in baseline."
-      }
-    },
-    "schemas": {
-      "VehicleCreate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "make": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 60,
-            "pattern": "\\S"
-          },
-          "model": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "\\S"
-          },
-          "year": {
-            "type": "integer",
-            "minimum": 1900,
-            "maximum": 2100
-          },
-          "price_pence": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 100000000
-          },
-          "approved_facts": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200,
-              "pattern": "\\S"
-            },
-            "maxItems": 20
-          }
-        },
-        "required": [
-          "make",
-          "model",
-          "year",
-          "price_pence"
-        ]
-      },
-      "Vehicle": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "make": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 60,
-            "pattern": "\\S"
-          },
-          "model": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "\\S"
-          },
-          "year": {
-            "type": "integer",
-            "minimum": 1900,
-            "maximum": 2100
-          },
-          "price_pence": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 100000000
-          },
-          "approved_facts": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200,
-              "pattern": "\\S"
-            },
-            "maxItems": 20
-          },
-          "id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "available",
-              "reserved",
-              "sold"
-            ]
-          },
-          "archived": {
-            "type": "boolean"
-          },
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "make",
-          "model",
-          "year",
-          "price_pence",
-          "approved_facts",
-          "id",
-          "status",
-          "archived",
-          "revision",
-          "created_at",
-          "updated_at"
-        ]
-      },
-      "VehicleUpdate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "make": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 60,
-            "pattern": "\\S"
-          },
-          "model": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "\\S"
-          },
-          "year": {
-            "type": "integer",
-            "minimum": 1900,
-            "maximum": 2100
-          },
-          "price_pence": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 100000000
-          },
-          "approved_facts": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200,
-              "pattern": "\\S"
-            },
-            "maxItems": 20
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "available",
-              "reserved",
-              "sold"
-            ]
-          },
-          "archived": {
-            "type": "boolean"
-          },
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          }
-        },
-        "required": [
-          "revision"
-        ],
-        "minProperties": 2
-      },
-      "EnquiryCreate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "vehicle_id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "customer": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "\\S"
-          },
-          "message": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 1000,
-            "pattern": "\\S"
-          }
-        },
-        "required": [
-          "vehicle_id",
-          "customer",
-          "message"
-        ]
-      },
-      "EnquiryUpdate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "new",
-              "contacted",
-              "closed"
-            ]
-          }
-        },
-        "required": [
-          "revision",
-          "status"
-        ]
-      },
-      "Enquiry": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "vehicle_id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "customer": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80,
-            "pattern": "\\S"
-          },
-          "message": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 1000,
-            "pattern": "\\S"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "new",
-              "contacted",
-              "closed"
-            ]
-          },
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "vehicle_id",
-          "customer",
-          "message",
-          "status",
-          "revision",
-          "created_at",
-          "updated_at"
-        ]
-      },
-      "TaskCreate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "enquiry_id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "due_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "note": {
-            "type": "string",
-            "maxLength": 300
-          }
-        },
-        "required": [
-          "enquiry_id",
-          "due_date"
-        ]
-      },
-      "TaskUpdate": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "due_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "completed": {
-            "type": "boolean"
-          },
-          "note": {
-            "type": "string",
-            "maxLength": 300
-          }
-        },
-        "required": [
-          "revision"
-        ],
-        "minProperties": 2
-      },
-      "Task": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "enquiry_id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "due_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "note": {
-            "type": "string",
-            "maxLength": 300
-          },
-          "completed": {
-            "type": "boolean"
-          },
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "id",
-          "enquiry_id",
-          "due_date",
-          "note",
-          "completed",
-          "revision",
-          "created_at",
-          "updated_at"
-        ]
-      },
-      "Error": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "error": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "code": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 60,
-                "pattern": "\\S"
-              },
-              "message": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 300,
-                "pattern": "\\S"
-              },
-              "request_id": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 100,
-                "pattern": "\\S"
-              },
-              "current_revision": {
-                "type": "integer",
-                "minimum": 1
-              }
-            },
-            "required": [
-              "code",
-              "message",
-              "request_id"
-            ]
-          }
-        },
-        "required": [
-          "error"
-        ]
-      },
-      "Dashboard": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "available": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "reserved": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "sold": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "stock_value_pence": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "open_enquiries": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "open_tasks": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "overdue_tasks": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "required": [
-          "available",
-          "reserved",
-          "sold",
-          "stock_value_pence",
-          "open_enquiries",
-          "open_tasks",
-          "overdue_tasks"
-        ]
-      },
-      "Health": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "ok",
-              "unavailable"
-            ]
-          },
-          "version": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 60,
-            "pattern": "\\S"
-          }
-        },
-        "required": [
-          "status",
-          "version"
-        ]
-      },
-      "Change": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "sequence": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "entity": {
-            "type": "string",
-            "enum": [
-              "vehicle",
-              "enquiry",
-              "task"
-            ]
-          },
-          "entity_id": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "revision": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "occurred_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "sequence",
-          "entity",
-          "entity_id",
-          "revision",
-          "occurred_at"
-        ]
-      },
-      "Changes": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Change"
-            }
-          },
-          "next_sequence": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "has_more": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "items",
-          "next_sequence",
-          "has_more"
-        ]
-      },
-      "VehiclePage": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Vehicle"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          }
-        },
-        "required": [
-          "items",
-          "total",
-          "offset",
-          "limit"
-        ]
-      },
-      "EnquiryPage": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Enquiry"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          }
-        },
-        "required": [
-          "items",
-          "total",
-          "offset",
-          "limit"
-        ]
-      },
-      "TaskPage": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Task"
-            }
-          },
-          "total": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          }
-        },
-        "required": [
-          "items",
-          "total",
-          "offset",
-          "limit"
-        ]
-      }
-    }
-  }
-}
+openapi: 3.1.0
+info:
+  title: Dealer Desk API
+  version: 2.0.0-design
+  description: Contract-first upgrade design. The existing baseline backend does not
+    implement this version yet. Fictional demo data only.
+servers:
+- url: http://127.0.0.1:8090
+  description: Planned local demo
+security:
+- demoBearer: []
+paths:
+  /health:
+    get:
+      operationId: health
+      summary: Check app and database readiness
+      security: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: Database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/vehicles:
+    get:
+      operationId: listVehicles
+      summary: Search and filter vehicle stock
+      description: 'Case-insensitive literal substring search on make/model. Stable
+        order: ID descending. Archived stock excluded unless requested.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehiclePage'
+        '401': &id001
+          description: Missing or invalid demo access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404': &id002
+          description: Record not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409': &id003
+          description: Stale revision, archived stock or invalid workflow transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422': &id004
+          description: Invalid JSON fields or business validation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429': &id005
+          description: Demo request rate exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503': &id006
+          description: Dependency unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      parameters:
+      - &id007
+        name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - &id008
+        name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 100
+      - name: status
+        in: query
+        required: false
+        schema: &id014
+          type: string
+          enum:
+          - available
+          - reserved
+          - sold
+      - name: include_archived
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+    post:
+      operationId: createVehicle
+      summary: Create vehicle stock
+      description: Status starts available, archived false, revision 1; approved_facts
+        defaults to []. Price is integer pence. Strict types and whitespace trimming
+        are required.
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleCreate'
+  /api/vehicles/{vehicle_id}:
+    parameters:
+    - name: vehicle_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    get:
+      operationId: getVehicle
+      summary: Read a vehicle, including archived stock
+      description: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+    patch:
+      operationId: updateVehicle
+      summary: Edit details, status or archive state
+      description: 'Atomic compare-and-update: match the submitted revision; otherwise
+        409 with current_revision. Increment revision on accepted changes. Same-status
+        detail edits are allowed. available→reserved/sold; reserved→available/sold;
+        sold→available only. sold→reserved returns 409. Archive/restore is reversible.
+        Audit the change.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleUpdate'
+  /api/enquiries:
+    get:
+      operationId: listEnquiries
+      summary: List enquiry queue
+      description: Stable order ID descending.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnquiryPage'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      parameters:
+      - *id007
+      - *id008
+      - name: vehicle_id
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - new
+          - contacted
+          - closed
+    post:
+      operationId: createEnquiry
+      summary: Record an enquiry
+      description: Vehicle must exist and be unarchived. Status starts new, revision
+        1. Trim bounded text; no real customer data in demo.
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnquiryCreate'
+  /api/enquiries/{enquiry_id}:
+    parameters:
+    - name: enquiry_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    get:
+      operationId: getEnquiry
+      summary: Read an enquiry
+      description: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+    patch:
+      operationId: updateEnquiry
+      summary: Change enquiry state
+      description: Revision match required. new→contacted/closed; contacted→closed/new;
+        closed→contacted for explicit reopen. Same-state submissions are allowed but
+        logged. Reject invalid transitions with 409.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enquiry'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnquiryUpdate'
+  /api/tasks:
+    get:
+      operationId: listTasks
+      summary: List follow-ups
+      description: Stable order ID descending. Overdue means incomplete and due_date
+        before today in configured dealer timezone (Europe/London default).
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskPage'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      parameters:
+      - *id007
+      - *id008
+      - name: enquiry_id
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      - name: completed
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: overdue
+        in: query
+        required: false
+        schema:
+          type: boolean
+    post:
+      operationId: createTask
+      summary: Schedule a follow-up
+      description: Enquiry must exist and be open. Reject closed enquiry with 409.
+        due_date must be today or later in dealer timezone. Past dates become overdue
+        naturally. note defaults empty; completed false; revision 1.
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+  /api/tasks/{task_id}:
+    parameters:
+    - name: task_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    get:
+      operationId: getTask
+      summary: Read a follow-up
+      description: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+    patch:
+      operationId: updateTask
+      summary: Complete, reopen or reschedule
+      description: Revision match required. A changed due_date must be today or later;
+        completing an already overdue task is allowed. Reopening a task for a closed
+        enquiry returns 409; completion is allowed. Change increments revision and
+        creates audit event.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdate'
+  /api/dashboard:
+    get:
+      operationId: getDashboard
+      summary: Read stock and outstanding-work totals
+      description: Stock counts exclude archived vehicles. Value includes available/reserved
+        only. Open enquiries are new/contacted. Task totals count incomplete tasks
+        for open enquiries; overdue uses dealer timezone.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+  /api/changes:
+    get:
+      operationId: listChanges
+      summary: Read bounded change notifications
+      description: Ascending sequence; next_sequence is last returned sequence, or
+        input after if empty. has_more signals another page. No customer text. Poll
+        every 3 seconds; after draining pages refresh affected views. Server retains
+        all demo notifications. This is polling, not WebSockets.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Changes'
+        '401': *id001
+        '404': *id002
+        '409': *id003
+        '422': *id004
+        '429': *id005
+        '503': *id006
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 100
+components:
+  securitySchemes:
+    demoBearer:
+      type: http
+      scheme: bearer
+      description: Operator-configured demo token; never embed in public frontend
+        assets. Enter at runtime; keep in session memory. All API routes require it;
+        health is public. Authentication/rate limiting are not implemented in baseline.
+  schemas:
+    VehicleCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        make: &id009
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: \S
+        model: &id010
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        year: &id011
+          type: integer
+          minimum: 1900
+          maximum: 2100
+        price_pence: &id012
+          type: integer
+          minimum: 0
+          maximum: 100000000
+        approved_facts: &id013
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 200
+            pattern: \S
+          maxItems: 20
+      required:
+      - make
+      - model
+      - year
+      - price_pence
+    Vehicle:
+      type: object
+      additionalProperties: false
+      properties:
+        make: *id009
+        model: *id010
+        year: *id011
+        price_pence: *id012
+        approved_facts: *id013
+        id:
+          type: integer
+          minimum: 1
+        status: *id014
+        archived:
+          type: boolean
+        revision:
+          type: integer
+          minimum: 1
+        created_at: &id015
+          type: string
+          format: date-time
+        updated_at: *id015
+      required:
+      - make
+      - model
+      - year
+      - price_pence
+      - approved_facts
+      - id
+      - status
+      - archived
+      - revision
+      - created_at
+      - updated_at
+    VehicleUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        make: *id009
+        model: *id010
+        year: *id011
+        price_pence: *id012
+        approved_facts: *id013
+        status: *id014
+        archived:
+          type: boolean
+        revision:
+          type: integer
+          minimum: 1
+      required:
+      - revision
+      minProperties: 2
+    EnquiryCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        vehicle_id:
+          type: integer
+          minimum: 1
+        customer:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        message:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+      required:
+      - vehicle_id
+      - customer
+      - message
+    EnquiryUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        revision:
+          type: integer
+          minimum: 1
+        status:
+          type: string
+          enum:
+          - new
+          - contacted
+          - closed
+      required:
+      - revision
+      - status
+    Enquiry:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        vehicle_id:
+          type: integer
+          minimum: 1
+        customer:
+          type: string
+          minLength: 1
+          maxLength: 80
+          pattern: \S
+        message:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          pattern: \S
+        status:
+          type: string
+          enum:
+          - new
+          - contacted
+          - closed
+        revision:
+          type: integer
+          minimum: 1
+        created_at: *id015
+        updated_at: *id015
+      required:
+      - id
+      - vehicle_id
+      - customer
+      - message
+      - status
+      - revision
+      - created_at
+      - updated_at
+    TaskCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        enquiry_id:
+          type: integer
+          minimum: 1
+        due_date:
+          type: string
+          format: date
+        note:
+          type: string
+          maxLength: 300
+      required:
+      - enquiry_id
+      - due_date
+    TaskUpdate:
+      type: object
+      additionalProperties: false
+      properties:
+        revision:
+          type: integer
+          minimum: 1
+        due_date:
+          type: string
+          format: date
+        completed:
+          type: boolean
+        note:
+          type: string
+          maxLength: 300
+      required:
+      - revision
+      minProperties: 2
+    Task:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        enquiry_id:
+          type: integer
+          minimum: 1
+        due_date:
+          type: string
+          format: date
+        note:
+          type: string
+          maxLength: 300
+        completed:
+          type: boolean
+        revision:
+          type: integer
+          minimum: 1
+        created_at: *id015
+        updated_at: *id015
+      required:
+      - id
+      - enquiry_id
+      - due_date
+      - note
+      - completed
+      - revision
+      - created_at
+      - updated_at
+    Error:
+      type: object
+      additionalProperties: false
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          properties:
+            code:
+              type: string
+              minLength: 1
+              maxLength: 60
+              pattern: \S
+            message:
+              type: string
+              minLength: 1
+              maxLength: 300
+              pattern: \S
+            request_id:
+              type: string
+              minLength: 1
+              maxLength: 100
+              pattern: \S
+            current_revision:
+              type: integer
+              minimum: 1
+          required:
+          - code
+          - message
+          - request_id
+      required:
+      - error
+    Dashboard:
+      type: object
+      additionalProperties: false
+      properties:
+        available:
+          type: integer
+          minimum: 0
+        reserved:
+          type: integer
+          minimum: 0
+        sold:
+          type: integer
+          minimum: 0
+        stock_value_pence:
+          type: integer
+          minimum: 0
+        open_enquiries:
+          type: integer
+          minimum: 0
+        open_tasks:
+          type: integer
+          minimum: 0
+        overdue_tasks:
+          type: integer
+          minimum: 0
+      required:
+      - available
+      - reserved
+      - sold
+      - stock_value_pence
+      - open_enquiries
+      - open_tasks
+      - overdue_tasks
+    Health:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+          - unavailable
+        version:
+          type: string
+          minLength: 1
+          maxLength: 60
+          pattern: \S
+      required:
+      - status
+      - version
+    Change:
+      type: object
+      additionalProperties: false
+      properties:
+        sequence:
+          type: integer
+          minimum: 1
+        entity:
+          type: string
+          enum:
+          - vehicle
+          - enquiry
+          - task
+        entity_id:
+          type: integer
+          minimum: 1
+        revision:
+          type: integer
+          minimum: 1
+        occurred_at: *id015
+      required:
+      - sequence
+      - entity
+      - entity_id
+      - revision
+      - occurred_at
+    Changes:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        next_sequence:
+          type: integer
+          minimum: 0
+        has_more:
+          type: boolean
+      required:
+      - items
+      - next_sequence
+      - has_more
+    VehiclePage:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vehicle'
+        total:
+          type: integer
+          minimum: 0
+        offset:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+      required:
+      - items
+      - total
+      - offset
+      - limit
+    EnquiryPage:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Enquiry'
+        total:
+          type: integer
+          minimum: 0
+        offset:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+      required:
+      - items
+      - total
+      - offset
+      - limit
+    TaskPage:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        total:
+          type: integer
+          minimum: 0
+        offset:
+          type: integer
+          minimum: 0
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+      required:
+      - items
+      - total
+      - offset
+      - limit
