@@ -1,0 +1,1362 @@
+[
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 1200000,
+    "approved_facts": [
+      "Mileage: 15,944 miles",
+      "Transmission: Automatic",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £12000"
+    ],
+    "source_row": 2,
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "mileage": 15944
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2018,
+    "price_pence": 1400000,
+    "approved_facts": [
+      "Mileage: 9,083 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £14000"
+    ],
+    "source_row": 3,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 9083
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2017,
+    "price_pence": 1300000,
+    "approved_facts": [
+      "Mileage: 12,456 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £13000"
+    ],
+    "source_row": 4,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 12456
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2019,
+    "price_pence": 1750000,
+    "approved_facts": [
+      "Mileage: 10,460 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £17500"
+    ],
+    "source_row": 5,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 10460
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2019,
+    "price_pence": 1650000,
+    "approved_facts": [
+      "Mileage: 1,482 miles",
+      "Transmission: Automatic",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £16500"
+    ],
+    "source_row": 6,
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "mileage": 1482
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2015,
+    "price_pence": 1050000,
+    "approved_facts": [
+      "Mileage: 35,432 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.6 L",
+      "Historical source price: £10500"
+    ],
+    "source_row": 7,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 35432
+  },
+  {
+    "make": "Ford",
+    "model": "Puma",
+    "year": 2019,
+    "price_pence": 2250000,
+    "approved_facts": [
+      "Mileage: 2,029 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £22500"
+    ],
+    "source_row": 8,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 2029
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 900000,
+    "approved_facts": [
+      "Mileage: 13,054 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £9000"
+    ],
+    "source_row": 9,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 13054
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2019,
+    "price_pence": 2550000,
+    "approved_facts": [
+      "Mileage: 6,894 miles",
+      "Transmission: Automatic",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £25500"
+    ],
+    "source_row": 10,
+    "transmission": "Automatic",
+    "fuelType": "Diesel",
+    "mileage": 6894
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2018,
+    "price_pence": 1000000,
+    "approved_facts": [
+      "Mileage: 48,141 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £10000"
+    ],
+    "source_row": 11,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 48141
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 1156100,
+    "approved_facts": [
+      "Mileage: 18,803 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £11561"
+    ],
+    "source_row": 12,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 18803
+  },
+  {
+    "make": "Ford",
+    "model": "EcoSport",
+    "year": 2018,
+    "price_pence": 1350000,
+    "approved_facts": [
+      "Mileage: 12,065 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £13500"
+    ],
+    "source_row": 13,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 12065
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 1100000,
+    "approved_facts": [
+      "Mileage: 20,978 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £11000"
+    ],
+    "source_row": 14,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 20978
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1799900,
+    "approved_facts": [
+      "Mileage: 9,002 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £17999"
+    ],
+    "source_row": 15,
+    "transmission": "Semi-Auto",
+    "fuelType": "Diesel",
+    "mileage": 9002
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1899900,
+    "approved_facts": [
+      "Mileage: 8,970 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £18999"
+    ],
+    "source_row": 16,
+    "transmission": "Semi-Auto",
+    "fuelType": "Diesel",
+    "mileage": 8970
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1439900,
+    "approved_facts": [
+      "Mileage: 12,810 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £14399"
+    ],
+    "source_row": 17,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 12810
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2019,
+    "price_pence": 1799900,
+    "approved_facts": [
+      "Mileage: 10,428 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £17999"
+    ],
+    "source_row": 18,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 10428
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1689900,
+    "approved_facts": [
+      "Mileage: 14,680 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £16899"
+    ],
+    "source_row": 19,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 14680
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 1099900,
+    "approved_facts": [
+      "Mileage: 12,427 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £10999"
+    ],
+    "source_row": 20,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 12427
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2019,
+    "price_pence": 1250000,
+    "approved_facts": [
+      "Mileage: 25,521 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £12500"
+    ],
+    "source_row": 21,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 25521
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 949900,
+    "approved_facts": [
+      "Mileage: 20,400 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.1 L",
+      "Historical source price: £9499"
+    ],
+    "source_row": 22,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 20400
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 1050000,
+    "approved_facts": [
+      "Mileage: 24,926 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £10500"
+    ],
+    "source_row": 23,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 24926
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 899500,
+    "approved_facts": [
+      "Mileage: 26,163 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £8995"
+    ],
+    "source_row": 24,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 26163
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2014,
+    "price_pence": 899500,
+    "approved_facts": [
+      "Mileage: 59,000 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £8995"
+    ],
+    "source_row": 25,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 59000
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2014,
+    "price_pence": 679500,
+    "approved_facts": [
+      "Mileage: 35,299 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £6795"
+    ],
+    "source_row": 26,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 35299
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2017,
+    "price_pence": 1849900,
+    "approved_facts": [
+      "Mileage: 13,063 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 2 L",
+      "Historical source price: £18499"
+    ],
+    "source_row": 27,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 13063
+  },
+  {
+    "make": "Ford",
+    "model": "C-MAX",
+    "year": 2018,
+    "price_pence": 1179900,
+    "approved_facts": [
+      "Mileage: 23,800 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £11799"
+    ],
+    "source_row": 28,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 23800
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2015,
+    "price_pence": 829900,
+    "approved_facts": [
+      "Mileage: 25,935 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £8299"
+    ],
+    "source_row": 29,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 25935
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 1249900,
+    "approved_facts": [
+      "Mileage: 8,700 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £12499"
+    ],
+    "source_row": 30,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 8700
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 869900,
+    "approved_facts": [
+      "Mileage: 25,000 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £8699"
+    ],
+    "source_row": 31,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 25000
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2016,
+    "price_pence": 799900,
+    "approved_facts": [
+      "Mileage: 60,730 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £7999"
+    ],
+    "source_row": 32,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 60730
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 899100,
+    "approved_facts": [
+      "Mileage: 18,561 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £8991"
+    ],
+    "source_row": 33,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 18561
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price_pence": 1899000,
+    "approved_facts": [
+      "Mileage: 8,400 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £18990"
+    ],
+    "source_row": 34,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 8400
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2013,
+    "price_pence": 723600,
+    "approved_facts": [
+      "Mileage: 39,090 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £7236"
+    ],
+    "source_row": 35,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 39090
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1528700,
+    "approved_facts": [
+      "Mileage: 33,149 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £15287"
+    ],
+    "source_row": 36,
+    "transmission": "Semi-Auto",
+    "fuelType": "Diesel",
+    "mileage": 33149
+  },
+  {
+    "make": "Ford",
+    "model": "Mondeo",
+    "year": 2019,
+    "price_pence": 2000000,
+    "approved_facts": [
+      "Mileage: 24 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £20000"
+    ],
+    "source_row": 37,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 24
+  },
+  {
+    "make": "Ford",
+    "model": "EcoSport",
+    "year": 2020,
+    "price_pence": 2000000,
+    "approved_facts": [
+      "Mileage: 558 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £20000"
+    ],
+    "source_row": 38,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 558
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2019,
+    "price_pence": 2137800,
+    "approved_facts": [
+      "Mileage: 3,259 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £21378"
+    ],
+    "source_row": 39,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 3259
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 981400,
+    "approved_facts": [
+      "Mileage: 15,100 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £9814"
+    ],
+    "source_row": 40,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 15100
+  },
+  {
+    "make": "Ford",
+    "model": "Ka+",
+    "year": 2018,
+    "price_pence": 826100,
+    "approved_facts": [
+      "Mileage: 25,000 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £8261"
+    ],
+    "source_row": 41,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 25000
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2017,
+    "price_pence": 878800,
+    "approved_facts": [
+      "Mileage: 15,612 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £8788"
+    ],
+    "source_row": 42,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 15612
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 1225100,
+    "approved_facts": [
+      "Mileage: 8,920 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £12251"
+    ],
+    "source_row": 43,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 8920
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2017,
+    "price_pence": 1632000,
+    "approved_facts": [
+      "Mileage: 24,803 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £16320"
+    ],
+    "source_row": 44,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 24803
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2019,
+    "price_pence": 1314000,
+    "approved_facts": [
+      "Mileage: 7 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.1 L",
+      "Historical source price: £13140"
+    ],
+    "source_row": 45,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 7
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2018,
+    "price_pence": 1049100,
+    "approved_facts": [
+      "Mileage: 43,019 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £10491"
+    ],
+    "source_row": 46,
+    "transmission": "Semi-Auto",
+    "fuelType": "Petrol",
+    "mileage": 43019
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2016,
+    "price_pence": 1387000,
+    "approved_facts": [
+      "Mileage: 41,607 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £13870"
+    ],
+    "source_row": 47,
+    "transmission": "Semi-Auto",
+    "fuelType": "Diesel",
+    "mileage": 41607
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2017,
+    "price_pence": 1496000,
+    "approved_facts": [
+      "Mileage: 23,554 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 2 L",
+      "Historical source price: £14960"
+    ],
+    "source_row": 48,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 23554
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2019,
+    "price_pence": 1354000,
+    "approved_facts": [
+      "Mileage: 6,923 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £13540"
+    ],
+    "source_row": 49,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 6923
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price_pence": 1797000,
+    "approved_facts": [
+      "Mileage: 10,985 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £17970"
+    ],
+    "source_row": 50,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 10985
+  },
+  {
+    "make": "Ford",
+    "model": "C-MAX",
+    "year": 2017,
+    "price_pence": 933000,
+    "approved_facts": [
+      "Mileage: 29,617 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £9330"
+    ],
+    "source_row": 51,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 29617
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2016,
+    "price_pence": 600000,
+    "approved_facts": [
+      "Mileage: 47,613 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £6000"
+    ],
+    "source_row": 52,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 47613
+  },
+  {
+    "make": "Ford",
+    "model": "Ka+",
+    "year": 2019,
+    "price_pence": 899500,
+    "approved_facts": [
+      "Mileage: 5,122 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £8995"
+    ],
+    "source_row": 53,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 5122
+  },
+  {
+    "make": "Ford",
+    "model": "Ka+",
+    "year": 2019,
+    "price_pence": 849500,
+    "approved_facts": [
+      "Mileage: 32 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £8495"
+    ],
+    "source_row": 54,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 32
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2016,
+    "price_pence": 639500,
+    "approved_facts": [
+      "Mileage: 31,562 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £6395"
+    ],
+    "source_row": 55,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 31562
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price_pence": 1449500,
+    "approved_facts": [
+      "Mileage: 8,131 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £14495"
+    ],
+    "source_row": 56,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 8131
+  },
+  {
+    "make": "Ford",
+    "model": "Tourneo Custom",
+    "year": 2018,
+    "price_pence": 1999500,
+    "approved_facts": [
+      "Mileage: 24,568 miles",
+      "Transmission: Automatic",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £19995"
+    ],
+    "source_row": 57,
+    "transmission": "Automatic",
+    "fuelType": "Diesel",
+    "mileage": 24568
+  },
+  {
+    "make": "Ford",
+    "model": "S-MAX",
+    "year": 2017,
+    "price_pence": 1849500,
+    "approved_facts": [
+      "Mileage: 39,605 miles",
+      "Transmission: Automatic",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £18495"
+    ],
+    "source_row": 58,
+    "transmission": "Automatic",
+    "fuelType": "Diesel",
+    "mileage": 39605
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price_pence": 1799500,
+    "approved_facts": [
+      "Mileage: 11,496 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £17995"
+    ],
+    "source_row": 59,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 11496
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2013,
+    "price_pence": 549500,
+    "approved_facts": [
+      "Mileage: 51,271 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.2 L",
+      "Historical source price: £5495"
+    ],
+    "source_row": 60,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 51271
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1699500,
+    "approved_facts": [
+      "Mileage: 7,189 miles",
+      "Transmission: Automatic",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £16995"
+    ],
+    "source_row": 61,
+    "transmission": "Automatic",
+    "fuelType": "Diesel",
+    "mileage": 7189
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1649500,
+    "approved_facts": [
+      "Mileage: 29,428 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £16495"
+    ],
+    "source_row": 62,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 29428
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2018,
+    "price_pence": 1799800,
+    "approved_facts": [
+      "Mileage: 12,162 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £17998"
+    ],
+    "source_row": 63,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 12162
+  },
+  {
+    "make": "Ford",
+    "model": "B-MAX",
+    "year": 2014,
+    "price_pence": 749800,
+    "approved_facts": [
+      "Mileage: 33,023 miles",
+      "Transmission: Semi-Auto",
+      "Fuel: Petrol",
+      "Engine: 1.6 L",
+      "Historical source price: £7498"
+    ],
+    "source_row": 64,
+    "transmission": "Semi-Auto",
+    "fuelType": "Petrol",
+    "mileage": 33023
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2019,
+    "price_pence": 1749800,
+    "approved_facts": [
+      "Mileage: 2,714 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £17498"
+    ],
+    "source_row": 65,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 2714
+  },
+  {
+    "make": "Ford",
+    "model": "S-MAX",
+    "year": 2017,
+    "price_pence": 1749800,
+    "approved_facts": [
+      "Mileage: 17,051 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £17498"
+    ],
+    "source_row": 66,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 17051
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2013,
+    "price_pence": 599800,
+    "approved_facts": [
+      "Mileage: 44,304 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £5998"
+    ],
+    "source_row": 67,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 44304
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2019,
+    "price_pence": 1769800,
+    "approved_facts": [
+      "Mileage: 4,844 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £17698"
+    ],
+    "source_row": 68,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 4844
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2016,
+    "price_pence": 1100000,
+    "approved_facts": [
+      "Mileage: 31,810 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £11000"
+    ],
+    "source_row": 69,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 31810
+  },
+  {
+    "make": "Ford",
+    "model": "EcoSport",
+    "year": 2017,
+    "price_pence": 870000,
+    "approved_facts": [
+      "Mileage: 43,081 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £8700"
+    ],
+    "source_row": 70,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 43081
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2017,
+    "price_pence": 1530000,
+    "approved_facts": [
+      "Mileage: 47,159 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £15300"
+    ],
+    "source_row": 71,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 47159
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2013,
+    "price_pence": 749000,
+    "approved_facts": [
+      "Mileage: 25,000 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £7490"
+    ],
+    "source_row": 72,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 25000
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2017,
+    "price_pence": 1076000,
+    "approved_facts": [
+      "Mileage: 29,891 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £10760"
+    ],
+    "source_row": 73,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 29891
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2019,
+    "price_pence": 1876000,
+    "approved_facts": [
+      "Mileage: 10,237 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £18760"
+    ],
+    "source_row": 74,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 10237
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2014,
+    "price_pence": 636000,
+    "approved_facts": [
+      "Mileage: 48,653 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £6360"
+    ],
+    "source_row": 75,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 48653
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2014,
+    "price_pence": 627000,
+    "approved_facts": [
+      "Mileage: 60,888 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £6270"
+    ],
+    "source_row": 76,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 60888
+  },
+  {
+    "make": "Ford",
+    "model": "Kuga",
+    "year": 2017,
+    "price_pence": 1792000,
+    "approved_facts": [
+      "Mileage: 15,815 miles",
+      "Transmission: Automatic",
+      "Fuel: Petrol",
+      "Engine: 1.5 L",
+      "Historical source price: £17920"
+    ],
+    "source_row": 77,
+    "transmission": "Automatic",
+    "fuelType": "Petrol",
+    "mileage": 15815
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2013,
+    "price_pence": 479000,
+    "approved_facts": [
+      "Mileage: 74,128 miles",
+      "Transmission: Manual",
+      "Fuel: Petrol",
+      "Engine: 1 L",
+      "Historical source price: £4790"
+    ],
+    "source_row": 78,
+    "transmission": "Manual",
+    "fuelType": "Petrol",
+    "mileage": 74128
+  },
+  {
+    "make": "Ford",
+    "model": "Focus",
+    "year": 2015,
+    "price_pence": 783000,
+    "approved_facts": [
+      "Mileage: 50,124 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £7830"
+    ],
+    "source_row": 79,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 50124
+  },
+  {
+    "make": "Ford",
+    "model": "Fiesta",
+    "year": 2015,
+    "price_pence": 699000,
+    "approved_facts": [
+      "Mileage: 29,851 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 1.5 L",
+      "Historical source price: £6990"
+    ],
+    "source_row": 80,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 29851
+  },
+  {
+    "make": "Ford",
+    "model": "Edge",
+    "year": 2016,
+    "price_pence": 1864000,
+    "approved_facts": [
+      "Mileage: 24,105 miles",
+      "Transmission: Manual",
+      "Fuel: Diesel",
+      "Engine: 2 L",
+      "Historical source price: £18640"
+    ],
+    "source_row": 81,
+    "transmission": "Manual",
+    "fuelType": "Diesel",
+    "mileage": 24105
+  }
+]
