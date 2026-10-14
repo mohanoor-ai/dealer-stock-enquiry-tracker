@@ -1,8 +1,13 @@
+import sampleStock from './education-stock.json';
 import type {Vehicle,Enquiry,Task} from './types';
 // In-memory prototype only: no backend, persistence, auth or live model.
 const stamp=()=>new Date().toISOString();
 let vehicles:Vehicle[]=[];let enquiries:Enquiry[]=[];let tasks:Task[]=[];
 export function resetDemo(){vehicles=[{id:1,make:'Demo Motors',model:'City',year:2020,price_pence:950000,approved_facts:[],status:'available',archived:false,revision:1,created_at:stamp(),updated_at:stamp()}];enquiries=[];tasks=[];}
+export function loadSampleStock(){
+  vehicles=sampleStock.map((row,index)=>({...row,id:index+1,status:index%9===0?'sold':index%5===0?'reserved':'available',archived:false,revision:1,created_at:stamp(),updated_at:stamp()} as Vehicle));
+  enquiries=[];tasks=[];
+}
 resetDemo();
 function page<T>(items:T[],url:URL){const offset=Number(url.searchParams.get('offset')||0);const limit=Number(url.searchParams.get('limit')||100);return {items:items.slice(offset,offset+limit),total:items.length,offset,limit};}
 function find<T extends {id:number}>(items:T[],id:number):T {const item=items.find(x=>x.id===id);if(!item)throw Error('Record not found.');return item;}
