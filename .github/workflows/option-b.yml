@@ -35,6 +35,12 @@ jobs:
       - run: DATABASE_URL="$TEST_POSTGRES_URL" python -m alembic upgrade head
       - run: python -m pytest -q tests/integration/test_v2_postgres.py
       - run: python scripts/check_public_files.py
+      - name: Review source and dependency security
+        run: |
+          pip install bandit==1.8.6 pip-audit==2.9.0
+          python -m bandit -r backend_v2 -ll
+          pip-audit -r requirements.txt --progress-spinner off
+          npm audit --prefix frontend-v2 --omit=dev --audit-level=high
       - run: docker build -t dealer-desk:test .
       - run: |
           docker run -d --name dealer-smoke -p 8090:8090 dealer-desk:test
