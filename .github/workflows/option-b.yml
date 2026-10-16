@@ -43,10 +43,16 @@ jobs:
           npm audit --prefix frontend-v2 --omit=dev --audit-level=high
       - run: docker build -t dealer-desk:test .
       - run: |
-          docker run -d --name dealer-smoke -p 8090:8090 dealer-desk:test
+          docker volume create dealer-testdata
+          docker run -d --name dealer-smoke -p 8090:8090 -v dealer-testdata:/data dealer-desk:test
           for attempt in $(seq 1 30); do curl --fail http://127.0.0.1:8090/health && break; sleep 2; done
           curl --fail http://127.0.0.1:8090/health
           curl --fail http://127.0.0.1:8090/
+          curl --fail -X POST -H 'Content-Type: application/json' --data '{"make":"Container Demo","model":"Persistence","year":2020,"price_pence":100}' http://127.0.0.1:8090/api/vehicles
+          docker rm -f dealer-smoke
+          docker run -d --name dealer-smoke -p 8090:8090 -v dealer-testdata:/data dealer-desk:test
+          for attempt in $(seq 1 30); do curl --fail http://127.0.0.1:8090/health && break; sleep 2; done
+          python -c "import json,urllib.request; records=json.load(urllib.request.urlopen('http://127.0.0.1:8090/api/vehicles')); assert any(v['make']=='Container Demo' for v in records['items']); print('Container replacement persistence passed')"
       - run: docker logs dealer-smoke
         if: failure()
   browser:

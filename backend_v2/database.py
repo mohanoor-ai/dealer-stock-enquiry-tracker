@@ -7,7 +7,10 @@ def build_engine(url=None):
     url = url or os.environ.get('DATABASE_URL', 'sqlite:///data/dealer-v2.sqlite3')
     if url.startswith('sqlite:///') and ':memory:' not in url:
         Path(url.removeprefix('sqlite:///')).parent.mkdir(parents=True, exist_ok=True)
-    engine = create_engine(url, pool_pre_ping=True)
+    options = {}
+    if url.startswith('postgresql'):
+        options = {'pool_size': 3, 'max_overflow': 2, 'pool_timeout': 10, 'connect_args': {'prepare_threshold': None}}
+    engine = create_engine(url, pool_pre_ping=True, **options)
     if engine.dialect.name == 'sqlite':
         @event.listens_for(engine, 'connect')
         def enable_foreign_keys(connection, record):
@@ -16,3 +19,4 @@ def build_engine(url=None):
 
 def session_factory(engine):
     return sessionmaker(engine, expire_on_commit=False)
+
