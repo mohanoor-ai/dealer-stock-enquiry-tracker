@@ -1,6 +1,4 @@
 # Working rules
-Use simple English, small named functions and clear loops. Use classes for input models where helpful. No unnecessary framework or abstraction.
-Read product-spec.md and openapi.yaml before editing routes. Keep all browser requests in frontend/api.js. Use parameterised SQL. Do not add real customer data or secrets.
-Run: python start.py. Tests: python -m pytest; node --test tests/frontend.test.mjs. Guard: python scripts/check_public_files.py.
-One task at a time: describe expected behaviour, implement, inspect diff, verify, commit.
-The learning companion, master prompt and personal records are outside this public repository.
+Use simple English, focused functions and explicit control flow. Read product-spec.md, openapi.yaml and docs/OPTION_B.md before route/auth changes. V2 browser requests belong in frontend-v2/src/api.ts; auth requests are isolated in AuthGate.tsx. Baseline calls stay in frontend/api.js. Use bound SQL and transactional revision checks. Never grant operator access from user_metadata.
+
+Run backend tests, frontend-v2 tests/build, baseline frontend tests and the public-file guard. Keep HTTP/browser/PostgreSQL evidence separate from service checks. Preserve baseline tables, historical sample attribution and user data. Never include credentials, customer records, runtime databases or private learning notes in public commits. No live provisioning or automatic merge. Inspect diff and report actual results.

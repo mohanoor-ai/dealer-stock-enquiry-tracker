@@ -1,14 +1,14 @@
 openapi: 3.1.0
 info:
   title: Dealer Desk API
-  version: 2.0.0-design
-  description: Contract-first upgrade design. The existing baseline backend does not
-    implement this version yet. Fictional demo data only.
+  version: 2.0.0
+  description: Implemented V2. Hosted identity uses Supabase. See docs/OPTION_B.md
+    for modes, account setup and remaining verification.
 servers:
 - url: http://127.0.0.1:8090
   description: Planned local demo
 security:
-- demoBearer: []
+- supabaseAccess: []
 paths:
   /health:
     get:
@@ -104,7 +104,7 @@ paths:
       - name: status
         in: query
         required: false
-        schema: &id014
+        schema: &id009
           type: string
           enum:
           - available
@@ -171,8 +171,8 @@ paths:
       summary: Edit details, status or archive state
       description: 'Atomic compare-and-update: match the submitted revision; otherwise
         409 with current_revision. Increment revision on accepted changes. Same-status
-        detail edits are allowed. available→reserved/sold; reserved→available/sold;
-        sold→available only. sold→reserved returns 409. Archive/restore is reversible.
+        detail edits are allowed. availableâ†’reserved/sold; reservedâ†’available/sold;
+        soldâ†’available only. soldâ†’reserved returns 409. Archive/restore is reversible.
         Audit the change.'
       responses:
         '200':
@@ -281,9 +281,9 @@ paths:
     patch:
       operationId: updateEnquiry
       summary: Change enquiry state
-      description: Revision match required. new→contacted/closed; contacted→closed/new;
-        closed→contacted for explicit reopen. Same-state submissions are allowed but
-        logged. Reject invalid transitions with 409.
+      description: Revision match required. newâ†’contacted/closed; contactedâ†’closed/new;
+        closedâ†’contacted for explicit reopen. Same-state submissions are allowed
+        but logged. Reject invalid transitions with 409.
       responses:
         '200':
           description: Successful response
@@ -474,38 +474,185 @@ paths:
           minimum: 1
           maximum: 100
           default: 100
+  /live:
+    get:
+      summary: Live
+      operationId: live_live_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security: []
+  /auth/config:
+    get:
+      summary: Auth Config
+      operationId: auth_config_auth_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security: []
+  /auth/login:
+    post:
+      summary: Login
+      operationId: login_auth_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security: []
+  /auth/refresh:
+    post:
+      summary: Refresh
+      operationId: refresh_auth_refresh_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security: []
+  /auth/logout:
+    post:
+      summary: Logout
+      operationId: logout_auth_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security: []
+  /auth/me:
+    get:
+      summary: Me
+      operationId: me_auth_me_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/export:
+    get:
+      summary: Export
+      operationId: export_api_export_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/vehicles/{vehicle_id}/draft:
+    post:
+      summary: Listing Draft
+      operationId: listing_draft_api_vehicles__vehicle_id__draft_post
+      parameters:
+      - name: vehicle_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Vehicle Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   securitySchemes:
-    demoBearer:
+    supabaseAccess:
       type: http
       scheme: bearer
-      description: Operator-configured demo token; never embed in public frontend
-        assets. Enter at runtime; keep in session memory. All API routes require it;
-        health is public. Authentication/rate limiting are not implemented in baseline.
+      description: Supabase access token validated by the backend. Local mode is loopback-only.
+        Cookie refresh endpoints require exact Origin.
   schemas:
     VehicleCreate:
+      properties:
+        make:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Make
+        model:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Model
+        year:
+          type: integer
+          maximum: 2100.0
+          minimum: 1900.0
+          title: Year
+        price_pence:
+          type: integer
+          maximum: 100000000.0
+          minimum: 0.0
+          title: Price Pence
+        approved_facts:
+          items:
+            type: string
+            maxLength: 200
+            minLength: 1
+          type: array
+          maxItems: 20
+          title: Approved Facts
+      additionalProperties: false
+      type: object
+      required:
+      - make
+      - model
+      - year
+      - price_pence
+      title: VehicleCreate
+    Vehicle:
       type: object
       additionalProperties: false
       properties:
-        make: &id009
+        make:
           type: string
           minLength: 1
           maxLength: 60
           pattern: \S
-        model: &id010
+        model:
           type: string
           minLength: 1
           maxLength: 80
           pattern: \S
-        year: &id011
+        year:
           type: integer
           minimum: 1900
           maximum: 2100
-        price_pence: &id012
+        price_pence:
           type: integer
           minimum: 0
           maximum: 100000000
-        approved_facts: &id013
+        approved_facts:
           type: array
           items:
             type: string
@@ -513,33 +660,19 @@ components:
             maxLength: 200
             pattern: \S
           maxItems: 20
-      required:
-      - make
-      - model
-      - year
-      - price_pence
-    Vehicle:
-      type: object
-      additionalProperties: false
-      properties:
-        make: *id009
-        model: *id010
-        year: *id011
-        price_pence: *id012
-        approved_facts: *id013
         id:
           type: integer
           minimum: 1
-        status: *id014
+        status: *id009
         archived:
           type: boolean
         revision:
           type: integer
           minimum: 1
-        created_at: &id015
+        created_at: &id010
           type: string
           format: date-time
-        updated_at: *id015
+        updated_at: *id010
       required:
       - make
       - model
@@ -553,60 +686,110 @@ components:
       - created_at
       - updated_at
     VehicleUpdate:
-      type: object
-      additionalProperties: false
       properties:
-        make: *id009
-        model: *id010
-        year: *id011
-        price_pence: *id012
-        approved_facts: *id013
-        status: *id014
-        archived:
-          type: boolean
         revision:
           type: integer
-          minimum: 1
+          exclusiveMinimum: 0.0
+          title: Revision
+        make:
+          anyOf:
+          - type: string
+            maxLength: 60
+            minLength: 1
+          - type: 'null'
+          title: Make
+        model:
+          anyOf:
+          - type: string
+            maxLength: 80
+            minLength: 1
+          - type: 'null'
+          title: Model
+        year:
+          anyOf:
+          - type: integer
+            maximum: 2100.0
+            minimum: 1900.0
+          - type: 'null'
+          title: Year
+        price_pence:
+          anyOf:
+          - type: integer
+            maximum: 100000000.0
+            minimum: 0.0
+          - type: 'null'
+          title: Price Pence
+        approved_facts:
+          anyOf:
+          - items:
+              type: string
+              maxLength: 200
+              minLength: 1
+            type: array
+            maxItems: 20
+          - type: 'null'
+          title: Approved Facts
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - available
+            - reserved
+            - sold
+          - type: 'null'
+          title: Status
+        archived:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Archived
+      additionalProperties: false
+      type: object
       required:
       - revision
-      minProperties: 2
+      title: VehicleUpdate
     EnquiryCreate:
-      type: object
-      additionalProperties: false
       properties:
         vehicle_id:
           type: integer
-          minimum: 1
+          exclusiveMinimum: 0.0
+          title: Vehicle Id
         customer:
           type: string
-          minLength: 1
           maxLength: 80
-          pattern: \S
+          minLength: 1
+          title: Customer
         message:
           type: string
-          minLength: 1
           maxLength: 1000
-          pattern: \S
+          minLength: 1
+          title: Message
+      additionalProperties: false
+      type: object
       required:
       - vehicle_id
       - customer
       - message
+      title: EnquiryCreate
     EnquiryUpdate:
-      type: object
-      additionalProperties: false
       properties:
         revision:
           type: integer
-          minimum: 1
+          exclusiveMinimum: 0.0
+          title: Revision
         status:
           type: string
           enum:
           - new
           - contacted
           - closed
+          title: Status
+      additionalProperties: false
+      type: object
       required:
       - revision
       - status
+      title: EnquiryUpdate
     Enquiry:
       type: object
       additionalProperties: false
@@ -636,8 +819,8 @@ components:
         revision:
           type: integer
           minimum: 1
-        created_at: *id015
-        updated_at: *id015
+        created_at: *id010
+        updated_at: *id010
       required:
       - id
       - vehicle_id
@@ -648,39 +831,54 @@ components:
       - created_at
       - updated_at
     TaskCreate:
-      type: object
-      additionalProperties: false
       properties:
         enquiry_id:
           type: integer
-          minimum: 1
+          exclusiveMinimum: 0.0
+          title: Enquiry Id
         due_date:
           type: string
           format: date
+          title: Due Date
         note:
           type: string
           maxLength: 300
+          title: Note
+          default: ''
+      additionalProperties: false
+      type: object
       required:
       - enquiry_id
       - due_date
+      title: TaskCreate
     TaskUpdate:
-      type: object
-      additionalProperties: false
       properties:
         revision:
           type: integer
-          minimum: 1
+          exclusiveMinimum: 0.0
+          title: Revision
         due_date:
-          type: string
-          format: date
-        completed:
-          type: boolean
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Due Date
         note:
-          type: string
-          maxLength: 300
+          anyOf:
+          - type: string
+            maxLength: 300
+          - type: 'null'
+          title: Note
+        completed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Completed
+      additionalProperties: false
+      type: object
       required:
       - revision
-      minProperties: 2
+      title: TaskUpdate
     Task:
       type: object
       additionalProperties: false
@@ -702,8 +900,8 @@ components:
         revision:
           type: integer
           minimum: 1
-        created_at: *id015
-        updated_at: *id015
+        created_at: *id010
+        updated_at: *id010
       required:
       - id
       - enquiry_id
@@ -814,7 +1012,7 @@ components:
         revision:
           type: integer
           minimum: 1
-        occurred_at: *id015
+        occurred_at: *id010
       required:
       - sequence
       - entity
@@ -907,3 +1105,56 @@ components:
       - total
       - offset
       - limit
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Login:
+      properties:
+        email:
+          type: string
+          maxLength: 254
+          minLength: 3
+          title: Email
+        password:
+          type: string
+          maxLength: 1024
+          minLength: 1
+          title: Password
+      additionalProperties: false
+      type: object
+      required:
+      - email
+      - password
+      title: Login
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

@@ -1,11 +1,12 @@
 services:
   dealer:
     build: .
-    ports:
-      - "127.0.0.1:8090:8090"
+    ports: ["127.0.0.1:8090:8090"]
     environment:
-      DEALER_DB: /data/dealer.sqlite3
-    volumes:
-      - dealer_data:/data
+      DATABASE_URL: sqlite:////data/dealer-v2.sqlite3
+      APP_ENV: local
+      AUTH_MODE: local
+      AI_PROVIDER: disabled
+    volumes: [dealer_data:/data]
 volumes:
   dealer_data:

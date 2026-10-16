@@ -1,27 +1,20 @@
-# Dealer Stock & Enquiry Tracker
-A small full-stack learning project for managing fictional vehicle stock and enquiry follow-ups. It helps a dealer see stock state and outstanding work in one place.
+# Dealer Desk
+
+Vehicle stock, enquiries and follow-up tasks in one workspace. React/TypeScript → FastAPI → SQLAlchemy → SQLite locally or Supabase PostgreSQL when hosted. Supabase Auth provides hosted identity and viewer/operator access. Fictional demonstration data only until the production-readiness gates are completed.
 
 ## Run
-Python 3.10+ (tested here on 3.12):
-```bash
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# Linux/WSL:
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python start.py
-```
-Open http://127.0.0.1:8090. Stop with Ctrl+C. First installation needs internet; afterwards normal local use does not.
-Optional fictional seed: `python -m scripts.seed_demo`.
+Python 3.12+ and Node 24. Create a virtual environment and install requirements.txt. In frontend-v2 run `npm ci`, `npm run build`; then from the root run `python start.py` using the environment Python. Open http://127.0.0.1:8090. Windows/Linux launchers are in scripts. `python start.py --legacy` preserves the original baseline app.
 
-## Architecture
-Browser HTML/CSS/JavaScript → frontend/api.js → FastAPI functions and Pydantic input classes → SQLite helpers. FastAPI serves the browser and API from one origin. Data lives in data/dealer.sqlite3; DEALER_DB selects another path. Store integer pence.
-Contract: openapi.yaml. Interactive API docs: /docs. Spec: product-spec.md. AI workflow: docs/ai-usage-report.md.
+`docker compose up --build` starts the local SQLite edition. `docker compose -f compose-postgres.yml up --build` uses PostgreSQL after configuring a private LOCAL_DB_PASSWORD. Initial installation/build needs internet. Prepared local assets work offline with AI disabled. No runtime or model is bundled.
 
-## Checks and container
-`python -m pytest -q`; `node --test tests/frontend.test.mjs`; `python scripts/check_public_files.py` before adding private data.
-`docker compose up --build` runs the whole app. First build needs internet. The volume keeps the database; `docker compose down` stops it.
+## Behavior
+Create, edit, search and filter stock; archive and restore; record enquiries; schedule and complete tasks; inspect dashboard totals; export operator records. Updates require the current revision. Stale edits return 409 instead of overwriting newer records. Shared refresh runs every three seconds while visible. The preserved prototype remains available to frontend tests; normal launch uses the real API.
 
-## Status
-Local reference application. No public deployment, authenticated customer system, verified MCP host demo, complete observability or external scanner runs yet. Read docs/deployment.md, security/audit.md and docs/requirements-matrix.md before claiming submission readiness. Use fictional data only.
+## Checks
+`python -m pytest -q`; `node --test tests/frontend.test.mjs`; in frontend-v2 `npm test` and `npm run build`. HTTP/browser/PostgreSQL jobs are distinct from synchronous service checks. Set TEST_POSTGRES_URL only to a disposable test database. `python scripts/browser_journey.py` needs Playwright and Chromium. CI records actual outcomes; an authored workflow is not a successful run.
+
+## Deployment and recovery
+See docs/OPTION_B.md for Cloud Run, Supabase, auth setup, migrations, provider terms, backup/restore and baseline conversion. The active openapi.yaml describes V2; docs/openapi-baseline.json records the preserved baseline. Cloud delivery is manual, environment-protected and gated by verification. No accounts, paid services or live deployment are created by this source change. Optional AI is disabled by default and never saves/publishes a draft automatically.
+
+## Limits
+Local mode is a single-user loopback workspace. Hosted mode requires Supabase and real account-based validation. Public demo reads must use an isolated fictional database. Supabase Storage media uploads and multi-dealership SaaS remain later scope. Read docs/IMPLEMENTATION_STATUS.md before claiming production readiness. Private learning material is maintained separately.

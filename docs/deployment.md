@@ -1,3 +1,5 @@
+> Current implementation: see [Option B](OPTION_B.md) and [implementation status](IMPLEMENTATION_STATUS.md). The original notes below are retained as historical design context.
+
 # Deployment exercise — pending
 The application is not deployed. No hosting account or billing action was performed.
 1. Choose an approved container host and create a fictional-data demo service.
@@ -9,3 +11,4 @@ The application is not deployed. No hosting account or billing action was perfor
 7. Configure provider-specific delivery using secrets stored in GitHub settings. Gate deployment on passing tests and run a post-deploy smoke check. CI alone does not earn full CD evidence.
 Course module 3 also teaches Postgres and staging/production separation; these are further exercises, not implemented here.
 GitHub Pages alone cannot run the Python backend.
+
