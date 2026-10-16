@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: dealer
+      POSTGRES_USER: dealer
+      POSTGRES_PASSWORD: ${LOCAL_DB_PASSWORD:?Set LOCAL_DB_PASSWORD in .env}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U dealer -d dealer]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  migrate:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://dealer:${LOCAL_DB_PASSWORD}@db/dealer
+    depends_on:
+      db: {condition: service_healthy}
+    command: [python, -m, alembic, upgrade, head]
+  dealer:
+    build: .
+    ports: ["127.0.0.1:8090:8090"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://dealer:${LOCAL_DB_PASSWORD}@db/dealer
+      APP_ENV: local
+      AUTH_MODE: local
+      AI_PROVIDER: disabled
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+volumes:
+  postgres_data:

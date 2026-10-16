@@ -1,3 +1,5 @@
+> Current implementation: see [Option B](OPTION_B.md) and [implementation status](IMPLEMENTATION_STATUS.md). The original notes below are retained as historical design context.
+
 # Dealer Desk: free deployment blueprint
 Status: design, not a tested deployment. Reviewed 14 October 2026.
 
@@ -78,3 +80,4 @@ Keep private customer data, credentials, database files, logs, exports and learn
 
 ## Current limitation
 The upgraded frontend, database models and API contract exist, but the complete v2 live API, individual authentication, production container and cloud deployment still need implementation and verification. The local execution environment is disconnected, so no new runtime checks are claimed.
+

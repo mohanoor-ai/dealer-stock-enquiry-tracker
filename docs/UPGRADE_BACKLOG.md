@@ -1,6 +1,6 @@
 # Upgrade backlog
 Status: planned, not completed. Work one acceptance-tested change at a time.
-Dependencies are explicit. Preserve baseline on main; work on course-aligned-upgrade.
+Dependencies are explicit. Preserve baseline on main; work on development branch.
 
 | Task | Goal | Depends on | Done when |
 |---|---|---|---|
@@ -39,3 +39,4 @@ Commit:
 
 ## External blockers
 No paid cloud resource or real provider credentials selected. Transcript download blocked by HTTP 429. Container/browser tooling must be verified in a working runtime. These are unresolved checks, not completed tasks.
+

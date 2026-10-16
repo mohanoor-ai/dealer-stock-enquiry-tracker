@@ -1,0 +1,12 @@
+from pathlib import Path
+import yaml
+from backend_v2.app import app
+
+
+def test_contract_routes_and_requests_exist():
+    contract=yaml.safe_load((Path(__file__).resolve().parents[1]/'openapi.yaml').read_text(encoding='utf-8'))
+    actual=app.openapi()
+    assert set(contract['paths'])==set(actual['paths'])
+    for path,methods in actual['paths'].items():
+        assert set(contract['paths'][path])==set(methods)
+    assert 'supabaseAccess' in contract['components']['securitySchemes']

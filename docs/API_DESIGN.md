@@ -1,3 +1,5 @@
+> Current implementation: see [Option B](OPTION_B.md) and [implementation status](IMPLEMENTATION_STATUS.md). The original notes below are retained as historical design context.
+
 # API contract design decisions
 Status: v2 design, not implemented by the baseline server.
 Contract: openapi.yaml. OpenAPI 3.1 selected for compatibility with the planned backend/toolchain; no claim it is the newest release.
@@ -26,3 +28,4 @@ These checks do not prove runtime routes exist. Business transitions, date-relat
 
 ## Next
 Prototype React forms against fixtures from this contract. In parallel, design SQLAlchemy models and migrations. Preserve baseline code until upgraded routes/tests are ready.
+

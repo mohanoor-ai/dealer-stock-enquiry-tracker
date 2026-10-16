@@ -1,0 +1,39 @@
+name: Deploy verified Cloud Run release
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency: cloud-run-production
+jobs:
+  verify:
+    uses: ./.github/workflows/option-b.yml
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db
+      - run: gcloud auth configure-docker "${{ vars.GCP_REGION }}-docker.pkg.dev" --quiet
+      - name: Build immutable release
+        env:
+          IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/dealer-desk/app:${{ github.sha }}
+        run: |
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+      - name: Run configured migration job
+        run: |
+          gcloud run jobs update dealer-migrate --region "${{ vars.GCP_REGION }}" --image "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/dealer-desk/app:${{ github.sha }}"
+          gcloud run jobs execute dealer-migrate --region "${{ vars.GCP_REGION }}" --wait
+      - name: Deploy without changing configured secrets or access
+        run: |
+          gcloud run deploy dealer-desk --region "${{ vars.GCP_REGION }}" --image "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT }}/dealer-desk/app:${{ github.sha }}" --min-instances 0 --max-instances 1
+      - name: Readiness smoke check
+        env:
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
+        run: curl --fail --retry 5 --retry-delay 5 "$APP_ORIGIN/health"

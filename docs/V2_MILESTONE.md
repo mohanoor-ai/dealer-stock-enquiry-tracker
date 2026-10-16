@@ -1,3 +1,5 @@
+> Current implementation: see [Option B](OPTION_B.md) and [implementation status](IMPLEMENTATION_STATUS.md). The original notes below are retained as historical design context.
+
 # V2 frontend and database milestone
 
 ## Run the interface
@@ -32,3 +34,4 @@ ChatGPT drafted the prototype and models following product-spec.md and the prior
 
 ## Next
 Implement v2 validation/response models, error envelopes, token boundary, routes and atomic revision updates; connect the real database to frontend flows. Then test PostgreSQL and shared state.
+

@@ -1,0 +1,7 @@
+# Bounded operational evidence
+
+Every V2 HTTP response receives a server-generated request ID. Logs contain bounded route templates, status and duration rather than request/customer contents. Optional OTel traces and request counters can be exported by installing requirements-ops.txt and setting OTEL_ENABLED=true plus OTEL_EXPORTER_OTLP_ENDPOINT to a trusted collector. Start the local collector with compose-telemetry.yml. The collector's debug output is a development aid, not a retained production telemetry system.
+
+Use `python ops/evidence.py` to collect a fixed readiness observation and a structured investigation proposal. It cannot execute a repair and accepts no model-generated command/SQL input. Use fictional data for controlled failures. Save alert, request ID, release, redacted evidence, decision and actual recovery check as an incident packet. A full Grafana/Prometheus/Loki/Tempo stack and alert/rollback exercise remain a later operational gate; this file does not claim they ran.
+
+For MCP, install requirements-mcp.txt and run `python mcp-server/server.py` from an authorised stdio host. Configure MCP_DATABASE_URL with a separately provisioned read-only SQL role. The only tool returns fixed aggregate stock counts. No customer messages or arbitrary SQL arguments are exposed. Database role restrictions are independent of model instructions. Retain real handshake/tool/denied-operation evidence before calling the host demonstration complete.

@@ -1,0 +1,6 @@
+services:
+  collector:
+    image: otel/opentelemetry-collector:0.147.0
+    command: [--config=/etc/otel/config.yml]
+    ports: ["127.0.0.1:4318:4318"]
+    volumes: ["./ops/otel-collector.yml:/etc/otel/config.yml:ro"]
