@@ -27,6 +27,7 @@ def main():
                 page.get_by_text('Fictional buyer · stock #1',exact=True).wait_for()
                 assert page.get_by_role('button',name='Save follow-up',exact=True).is_enabled()
                 page.set_viewport_size({'width':390,'height':844})
+                print('Layout overflow diagnostics:',page.locator('body').evaluate('(root)=>Array.from(root.querySelectorAll("*")).filter(e=>e.getBoundingClientRect().right>window.innerWidth+1).map(e=>({tag:e.tagName,cls:e.className,right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width)})).slice(0,20)'))
                 assert page.locator('body').evaluate('(e)=>e.scrollWidth<=window.innerWidth')
                 browser.close()
         finally:
