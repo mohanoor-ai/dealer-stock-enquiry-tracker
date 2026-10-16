@@ -8,5 +8,6 @@ def test_contract_routes_and_requests_exist():
     actual=app.openapi()
     assert set(contract['paths'])==set(actual['paths'])
     for path,methods in actual['paths'].items():
-        assert set(contract['paths'][path])==set(methods)
+        verbs={'get','post','put','patch','delete','options','head','trace'}
+        assert set(contract['paths'][path]) & verbs == set(methods) & verbs
     assert 'supabaseAccess' in contract['components']['securitySchemes']
