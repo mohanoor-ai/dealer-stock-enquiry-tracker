@@ -5,6 +5,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import json
+from datetime import date, timedelta
 from urllib.request import urlopen
 from playwright.sync_api import sync_playwright
 
@@ -26,13 +28,30 @@ def main():
                 page.get_by_label('Fictional customer',exact=True).fill('Fictional buyer');page.get_by_label('Message',exact=True).fill('Demo visit');page.get_by_role('button',name='Save enquiry',exact=True).click()
                 page.get_by_text('Fictional buyer · stock #1',exact=True).wait_for()
                 assert page.get_by_role('button',name='Save follow-up',exact=True).is_enabled()
+                page.get_by_label('Due date',exact=True).fill((date.today()+timedelta(days=1)).isoformat())
+                page.get_by_label('Task note',exact=True).fill('Fictional call')
+                page.get_by_role('button',name='Save follow-up',exact=True).click()
+                page.get_by_role('button',name='Complete task',exact=True).click()
+                page.get_by_role('button',name='Reopen task',exact=True).wait_for()
+                page.get_by_role('button',name='Archive',exact=True).click()
+                page.get_by_role('heading',name='Browser Demo City',exact=True).wait_for(state='hidden')
+                page.get_by_role('button',name='Archived',exact=True).click()
+                page.get_by_role('button',name='Restore',exact=True).click()
+                page.get_by_role('heading',name='Browser Demo City',exact=True).wait_for(state='hidden')
+                page.get_by_role('button',name='All stock',exact=True).click()
+                page.get_by_role('heading',name='Browser Demo City',exact=True).wait_for()
+                with page.expect_download() as downloaded:
+                    page.get_by_role('button',name='Export records',exact=True).click()
+                assert json.loads(Path(downloaded.value.path()).read_text())['format']=='dealer-desk-v2'
+                page.reload()
+                page.get_by_role('heading',name='Browser Demo City',exact=True).wait_for()
                 page.set_viewport_size({'width':390,'height':844})
                 print('Layout overflow diagnostics:',page.locator('body').evaluate('(root)=>Array.from(root.querySelectorAll("*")).filter(e=>e.getBoundingClientRect().right>window.innerWidth+1).map(e=>({tag:e.tagName,cls:e.className,right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width)})).slice(0,20)'))
                 assert page.locator('body').evaluate('(e)=>e.scrollWidth<=window.innerWidth')
                 browser.close()
         finally:
             process.terminate();process.wait(timeout=15)
-    print('Browser stock/enquiry and narrow-layout checks passed')
+    print('Browser stock/enquiry/follow-up/archive/restore/export/reload and narrow-layout checks passed')
 
 
 if __name__=='__main__':main()

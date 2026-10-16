@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from fastapi.testclient import TestClient
 from backend_v2.app import create_app
 
@@ -12,7 +12,7 @@ def test_live_v2_http_journey(tmp_path,monkeypatch):
         vid=v.json()['id']
         e=client.post('/api/enquiries',json={'vehicle_id':vid,'customer':'Fictional buyer','message':'Visit'})
         assert e.status_code==201
-        t=client.post('/api/tasks',json={'enquiry_id':e.json()['id'],'due_date':date.today().isoformat()})
+        t=client.post('/api/tasks',json={'enquiry_id':e.json()['id'],'due_date':(date.today()+timedelta(days=1)).isoformat()})
         assert t.status_code==201
         assert client.get('/api/dashboard').json()['open_tasks']==1
         assert client.patch(f"/api/tasks/{t.json()['id']}",json={'revision':1,'completed':True}).status_code==200
